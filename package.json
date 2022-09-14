@@ -1,0 +1,37 @@
+{
+  "name": "phoenix",
+  "version": "1.0.0",
+  "description": "Phoenix ERP - API",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon",
+    "production": "pm2 start index.js --name phoenix-api"
+  },
+  "keywords": [
+    "Phoenix",
+    "ERP",
+    "API",
+    "AMX Sistemas"
+  ],
+  "author": "Amilton da Cruz Machado",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt-node": "^0.1.0",
+    "body-parser": "^1.19.2",
+    "consign": "^0.1.6",
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "jwt-simple": "^0.5.6",
+    "knex": "^1.0.4",
+    "moment": "^2.29.2",
+    "mongoose": "^6.2.9",
+    "node-schedule": "^2.1.0",
+    "passport": "^0.5.2",
+    "passport-jwt": "^4.0.0",
+    "pg": "^8.8.0",
+    "pm2": "^5.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
