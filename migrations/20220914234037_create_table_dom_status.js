@@ -5,9 +5,9 @@
 exports.up = function(knex) {
 
   return knex.schema.
-    createTable('dom_status', function (table) {
-      table.increments('dst_id');
-      table.string('dst_name', 10).notNullable();
+    createTable('status', function (table) {
+      table.increments('id');
+      table.string('name', 10).notNullable();
   });
   
 };

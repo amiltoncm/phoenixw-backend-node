@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt-node');
-const { password, user } = require('pg/lib/defaults');
+const { user } = require('pg/lib/defaults');
 
 module.exports = app => {
   const { existsOrError, notExistsOrError, equalsOrError } = app.api.validations.validations;
