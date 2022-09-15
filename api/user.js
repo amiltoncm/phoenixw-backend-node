@@ -51,7 +51,7 @@ module.exports = app => {
     app.db('users')
       .select('id', 'name', 'email', 'status', 'profileId')
       .then(users => res.json(users))
-      .catch(err => res.status(500).send(err))
+      .catch(err => res.status(500).send(err));
   }
   
   const del = (req, res) => {
