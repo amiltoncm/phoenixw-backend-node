@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt-node');
 const { password, user } = require('pg/lib/defaults');
 
 module.exports = app => {
-  const { existsOrError, notExistsOrError, equalsOrError } = app.api.validations;
+  const { existsOrError, notExistsOrError, equalsOrError } = app.api.validations.validations;
   
   const encryptPassword = password => {
     const salt = bcrypt.genSaltSync(10);
