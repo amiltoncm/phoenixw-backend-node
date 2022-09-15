@@ -1,0 +1,51 @@
+module.exports = app => {
+  const { existsOrError, notExistsOrError } = app.api.validations.validations;
+  
+  const save = async (req, res) => {
+    const status = {...req.body }
+    if (req.params.id) status.id = req.params.id;
+    try {
+      existsOrError(status.id, 'ID não informado!');
+      existsOrError(status.name, 'Nome não informado!');
+      
+      const statusFromDB = await app.db('dom_status').where({ dst_id: status.id }).first();
+      if(!status.id) {
+        notExistsOrError(statusFromDB, 'Status já cadastrado!');
+      }
+    } catch(msg) {
+      return res.status(400).send(msg);
+    }
+    
+    if (status.id) {
+      app.db('dom_status')
+        .update(status)
+        .where({ dst_id: status.id })
+        .then(_ => res.status(204).send())
+        .catch(err => res.status(500).send(err));
+    } else {
+      app.db('dom_status')
+        .insert(status)
+        .then(_ => res.status(204).send())
+        .catch(err => res.status(500).send(err));
+    }
+  }
+  
+  const get = (req, res) => {
+    app.db('dom_status')
+      .select('dst_id', 'dst_name')
+      .then(status => res.json(status))
+      .catch(err => res.status(500).send(err))
+  }
+  
+  const del = (req, res) => {
+    if (status.id) {
+      app.db('dom_status')
+        .update(dom_status)
+        .where({ dst_id: status.id })
+        .then(_ => res.status(204).send())
+        .catch(err => res.status(500).send(err));
+    }
+  }
+  
+  return { save, get, del }
+}

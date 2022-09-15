@@ -10,7 +10,7 @@ const port = 3001;
 consign()
   .include('./config/passport.js')
   .then('./config/middlewares.js')
-  .then('./api/validations.js')  
+  .then('./api/validations/validations.js')  
   .then('./api')    
   .then('./config/routes.js')
   .then('./routes')
