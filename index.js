@@ -4,6 +4,7 @@ const db = require('./config/db');
 
 app.db = db;
 
+const versao = '1.0.0';
 const port = 3001;
 
 consign()
@@ -16,5 +17,5 @@ consign()
   .into(app);
 
 app.listen(port, () => {
-  console.log(`Running: Phoenix ERP (AMX Sistemas) - API (Port: ${port})`);
+  console.log(`Running: Phoenix ERP (AMX Sistemas) - API - Versão: ${versao} (Port: ${port})`);
 });
