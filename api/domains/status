@@ -5,25 +5,26 @@ module.exports = app => {
     const status = {...req.body }
     if (req.params.id) status.id = req.params.id;
     try {
-      existsOrError(status.id, 'ID não informado!');
       existsOrError(status.name, 'Nome não informado!');
       
-      const statusFromDB = await app.db('dom_status').where({ dst_id: status.id }).first();
-      if(!status.id) {
-        notExistsOrError(statusFromDB, 'Status já cadastrado!');
+      if (status.id) {
+        const statusFromDB = await app.db('status').where({ id: status.id }).first();
+        if(!status.id) {
+          notExistsOrError(statusFromDB, 'Status já cadastrado!');
+        }
       }
     } catch(msg) {
       return res.status(400).send(msg);
     }
     
     if (status.id) {
-      app.db('dom_status')
+      app.db('status')
         .update(status)
-        .where({ dst_id: status.id })
+        .where({ id: status.id })
         .then(_ => res.status(204).send())
         .catch(err => res.status(500).send(err));
     } else {
-      app.db('dom_status')
+      app.db('status')
         .insert(status)
         .then(_ => res.status(204).send())
         .catch(err => res.status(500).send(err));
@@ -31,19 +32,23 @@ module.exports = app => {
   }
   
   const get = (req, res) => {
-    app.db('dom_status')
-      .select('dst_id', 'dst_name')
+    app.db('status')
+      .select('id', 'name')
       .then(status => res.json(status))
       .catch(err => res.status(500).send(err))
   }
   
   const del = (req, res) => {
-    if (status.id) {
-      app.db('dom_status')
-        .update(dom_status)
-        .where({ dst_id: status.id })
+    const status = {...req.body }
+    const confirm = req.params.id;
+    if (status.id == confirm) {
+      app.db('status')
+        .delete(status)
+        .where({ id: status.id })
         .then(_ => res.status(204).send())
         .catch(err => res.status(500).send(err));
+    } else {
+      res.status(400).send('Padrão inválido para exclusão!');
     }
   }
   

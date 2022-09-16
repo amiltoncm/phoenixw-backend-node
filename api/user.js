@@ -16,7 +16,6 @@ module.exports = app => {
       existsOrError(user.name, 'Nome não informado!');
       existsOrError(user.password, 'Senha não informada!');
       existsOrError(user.confirmPassword, 'Confirmação da senha não informada!');
-      existsOrError(user.email, 'E-mail não informado!');
       equalsOrError(user.password, user.confirmPassword, 'Senhas não conferem!')
       
       const userFromDB = await app.db('users').where({ email: user.email }).first();
@@ -49,15 +48,15 @@ module.exports = app => {
   
   const get = (req, res) => {
     app.db('users')
-      .select('id', 'name', 'email', 'status', 'profileId')
+      .select('id', 'name', 'email', 'status', 'profileId', 'created', 'updated', 'deleted')
       .then(users => res.json(users))
       .catch(err => res.status(500).send(err));
   }
   
   const del = (req, res) => {
     if (user.id) {
-      user.updatedAt = new Date;
-      user.deletedAt = new Date;
+      user.updated = new Date;
+      user.deleted = new Date;
       user.status = false;
 
       app.db('users')
