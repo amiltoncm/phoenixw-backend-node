@@ -6,12 +6,10 @@ module.exports = app => {
     if (req.params.id) status.id = req.params.id;
     try {
       existsOrError(status.name, 'Nome não informado!');
-      
-      if (status.id) {
-        const statusFromDB = await app.db('status').where({ id: status.id }).first();
-        if(!status.id) {
-          notExistsOrError(statusFromDB, 'Status já cadastrado!');
-        }
+
+      const statusFromDB = await app.db('status').where({ id: status.id }).first();
+      if(!status.id) {      
+        notExistsOrError(statusFromDB, 'Status já cadastrado!');
       }
     } catch(msg) {
       return res.status(400).send(msg);
