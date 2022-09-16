@@ -18,27 +18,29 @@ module.exports = app => {
       existsOrError(user.confirmPassword, 'Confirmação da senha não informada!');
       equalsOrError(user.password, user.confirmPassword, 'Senhas não conferem!')
       
-      const userFromDB = await app.db('users').where({ email: user.email }).first();
+      const userFromDB = await app.db('users').where({ name: user.name }).first();
       if(!user.id) {
         notExistsOrError(userFromDB, 'Usuário já cadastrado!');
       }
     } catch(msg) {
       return res.status(400).send(msg);
     }
-    user.status = user.status ? user.status : true;
+    user.statusId = user.statusId ? user.statusId : 1;
     user.profileId = user.profileId ? user.profileId : 1;
     user.password = encryptPassword(user.password);
 
     delete user.confirmPassword;
     
     if (user.id) {
-      user.updatedAt = new Date;
+      user.updated = new Date;
       app.db('users')
         .update(user)
         .where({ id: user.id })
         .then(_ => res.status(204).send())
         .catch(err => res.status(500).send(err));
     } else {
+      user.created = new Date;
+      user.updated = new Date;
       app.db('users')
         .insert(user)
         .then(_ => res.status(204).send())
@@ -48,16 +50,17 @@ module.exports = app => {
   
   const get = (req, res) => {
     app.db('users')
-      .select('id', 'name', 'email', 'status', 'profileId', 'created', 'updated', 'deleted')
+      .select('id', 'name', 'statusId', 'profileId', 'created', 'updated', 'deleted')
       .then(users => res.json(users))
       .catch(err => res.status(500).send(err));
   }
   
   const del = (req, res) => {
+    const user = {...req.body }
     if (user.id) {
       user.updated = new Date;
       user.deleted = new Date;
-      user.status = false;
+      user.statusId = 0;
 
       app.db('users')
         .update(user)
