@@ -1,5 +1,8 @@
 module.exports = app => {
   
+  app.route('/users/signin')
+    .post(app.api.user.save);
+  
   // Users
   app.route('/users')
     .all(app.config.passport.authenticate())
