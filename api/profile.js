@@ -62,6 +62,8 @@ module.exports = app => {
         .where({ id: profile.id })
         .then(_ => res.status(204).send())
         .catch(err => res.status(500).send(err));
+    } else {
+      return res.status(400).send('Perfil não encontrado!');        
     }
   }
   
