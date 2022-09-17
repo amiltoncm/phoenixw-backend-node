@@ -1,6 +1,6 @@
 module.exports = app => {
   const { existsOrError, notExistsOrError } = app.api.validations.validations;
-  
+
   const save = async (req, res) => {
     const status = {...req.body }
     if (req.params.id) status.id = req.params.id;
@@ -14,7 +14,7 @@ module.exports = app => {
     } catch(msg) {
       return res.status(400).send(msg);
     }
-    
+
     if (status.id) {
       app.db('status')
         .update(status)
@@ -28,14 +28,14 @@ module.exports = app => {
         .catch(err => res.status(500).send(err));
     }
   }
-  
+
   const get = (req, res) => {
     app.db('status')
       .select('id', 'name')
       .then(status => res.json(status))
       .catch(err => res.status(500).send(err))
   }
-  
+
   const del = (req, res) => {
     const status = {...req.body }
     if (status.id) {
@@ -48,6 +48,6 @@ module.exports = app => {
       res.status(400).send('Padrão inválido para exclusão!');
     }
   }
-  
+
   return { save, get, del }
-}
+};

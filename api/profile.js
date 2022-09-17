@@ -16,7 +16,7 @@ module.exports = app => {
     } catch(msg) {
       return res.status(400).send(msg);
     }
-    
+
     if (profile.id) {
       profile.updated = new Date;
       app.db('profiles')
@@ -33,7 +33,7 @@ module.exports = app => {
         .catch(err => res.status(500).send(err));
     }
   }
-  
+
   const get = async (req, res) => {
     app.db('profiles')
       .select('id', 'name', 'statusId', 'created', 'updated')
@@ -50,10 +50,10 @@ module.exports = app => {
         .then(profiles => res.json(profiles))
         .catch(err => res.status(500).send(err));
     } else {
-      return res.status(400).send('Perfil não encontrado!');        
+      return res.status(400).send('Perfil não encontrado!');
     }
   }
-  
+
   const del = async (req, res) => {
     const profile = {...req.body }
     if (profile.id) {
@@ -63,9 +63,9 @@ module.exports = app => {
         .then(_ => res.status(204).send())
         .catch(err => res.status(500).send(err));
     } else {
-      return res.status(400).send('Perfil não encontrado!');        
+      return res.status(400).send('Perfil não encontrado!');
     }
   }
-  
-  return { save, get, del, getById }  
-}
+
+  return { save, get, del, getById }
+};
