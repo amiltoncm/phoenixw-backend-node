@@ -28,4 +28,10 @@ Rollback:
 
 knex migrate:rollback
 
+Seeds:
+
+knex seed:make seed_name
+
+knex seed:run
+
 Token de autenticação utilizado - JWT

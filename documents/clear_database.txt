@@ -1,0 +1,6 @@
+DROP TABLE public.countries;
+DROP TABLE public.users;
+DROP TABLE public.profiles;
+DROP TABLE public.status;
+DROP TABLE public._migrations_lock;
+DROP TABLE public._migrations;
