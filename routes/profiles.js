@@ -8,6 +8,7 @@ module.exports = app => {
   
   app.route('/profiles/:id')
     .all(app.config.passport.authenticate())
+    .get(app.api.profile.getById)
     .put(app.api.profile.save)
     .delete(app.api.profile.del);
   

@@ -14,7 +14,6 @@ module.exports = app => {
         }
       }
     } catch(msg) {
-      console.log('1.5');
       return res.status(400).send(msg);
     }
     
@@ -42,6 +41,19 @@ module.exports = app => {
       .catch(err => res.status(500).send(err));
   }
 
+  const getById = async (req, res) => {
+    const profileId = req.params.id;
+    if (profileId) {
+      app.db('profiles')
+        .select('id', 'name', 'statusId', 'created', 'updated')
+        .where({ id: profileId })
+        .then(profiles => res.json(profiles))
+        .catch(err => res.status(500).send(err));
+    } else {
+      return res.status(400).send('Perfil não encontrado!');        
+    }
+  }
+  
   const del = async (req, res) => {
     const profile = {...req.body }
     if (profile.id) {
@@ -53,5 +65,5 @@ module.exports = app => {
     }
   }
   
-  return { save, get, del }  
+  return { save, get, del, getById }  
 }
