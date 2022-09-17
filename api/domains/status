@@ -38,8 +38,7 @@ module.exports = app => {
   
   const del = (req, res) => {
     const status = {...req.body }
-    const confirm = req.params.id;
-    if (status.id == confirm) {
+    if (status.id) {
       app.db('status')
         .delete(status)
         .where({ id: status.id })
