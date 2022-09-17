@@ -10,12 +10,14 @@ const port = 3001;
 consign()
   .include('./config/passport.js')
   .then('./config/middlewares.js')
-  .then('./api/validations/validations.js')  
-  .then('./api')    
+  .then('./api/validations/validations.js')
+  .then('./api')
   .then('./config/routes.js')
   .then('./routes')
   .into(app);
 
 app.listen(port, () => {
-  console.log(`Running: Phoenix ERP (AMX Sistemas) - API - Versão: ${versao} (Port: ${port})`);
+  console.log(
+    `Running: Phoenix ERP (AMX Sistemas) - API - Versão: ${versao} (Port: ${port})`
+  );
 });

@@ -3,12 +3,12 @@ const { user } = require('pg/lib/defaults');
 
 module.exports = app => {
   const { existsOrError, notExistsOrError, equalsOrError } = app.api.validations.validations;
-  
+
   const encryptPassword = password => {
     const salt = bcrypt.genSaltSync(10);
     return bcrypt.hashSync(password, salt);
   }
-  
+
   const save = async (req, res) => {
     const user = {...req.body }
     if (req.params.id) user.id = req.params.id;
@@ -17,7 +17,7 @@ module.exports = app => {
       existsOrError(user.password, 'Senha não informada!');
       existsOrError(user.confirmPassword, 'Confirmação da senha não informada!');
       equalsOrError(user.password, user.confirmPassword, 'Senhas não conferem!')
-      
+
       const userFromDB = await app.db('users').where({ name: user.name }).first();
       if(!user.id) {
         notExistsOrError(userFromDB, 'Usuário já cadastrado!');
@@ -30,7 +30,7 @@ module.exports = app => {
     user.password = encryptPassword(user.password);
 
     delete user.confirmPassword;
-    
+
     if (user.id) {
       user.updated = new Date;
       app.db('users')
@@ -47,14 +47,14 @@ module.exports = app => {
         .catch(err => res.status(500).send(err));
     }
   }
-  
+
   const get = (req, res) => {
     app.db('users')
       .select('id', 'name', 'statusId', 'profileId', 'created', 'updated', 'deleted')
       .then(users => res.json(users))
       .catch(err => res.status(500).send(err));
   }
-  
+
   const del = (req, res) => {
     const user = {...req.body }
     if (user.id) {
@@ -69,6 +69,6 @@ module.exports = app => {
         .catch(err => res.status(500).send(err));
     }
   }
-  
+
   return { save, get, del }
-}
+};

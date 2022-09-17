@@ -15,7 +15,7 @@ exports.up = function(knex) {
         .references('id')
         .inTable('status');      
       table.dateTime('created').notNullable();
-      table.dateTime('updated').notNullable();    
+      table.dateTime('updated').notNullable();
   });
 };
 
