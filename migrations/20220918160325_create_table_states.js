@@ -4,12 +4,17 @@
  */
 exports.up = function(knex) {
   return knex.schema.  
-    createTable('countries', function (table) {
-      table.integer('id').primary();
-      table.string('name', 50).notNullable().unique();
-      table.string('iso2', 2).notNullable().unique();
-      table.string('iso3', 3).notNullable().unique();
-      table.integer('statusId').notNullable()
+    createTable('states', function (table) {
+      table.increments('id').primary();
+      table.integer('code').notNullable();
+      table.string('abbreviation', 2).notNullable();
+      table.string('name', 30).notNullable();
+      table.integer('countryId').notNullable()
+        .unsigned()
+        .index()
+        .references('id')
+        .inTable('countries');
+        table.integer('statusId').notNullable()
         .unsigned()
         .index()
         .references('id')

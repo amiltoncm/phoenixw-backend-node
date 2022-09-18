@@ -1,3 +1,4 @@
+DROP TABLE public.states;
 DROP TABLE public.countries;
 DROP TABLE public.users;
 DROP TABLE public.profiles;

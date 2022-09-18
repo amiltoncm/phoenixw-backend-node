@@ -69,5 +69,5 @@ module.exports = app => {
     }
   }
 
-  return { save, get, del, getById }  
+  return { save, get, del, getById }
 };

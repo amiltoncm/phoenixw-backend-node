@@ -3,13 +3,13 @@ module.exports = app => {
   app
     .route('/states')
     .all(app.config.passport.authenticate())
-    .post(app.api.states.save)
-    .get(app.api.states.get)
+    .post(app.api.state.save)
+    .get(app.api.state.get)
 
   app
     .route('/states/:id')
     .all(app.config.passport.authenticate())
-    .get(app.api.states.getById)
-    .put(app.api.states.save)
-    .delete(app.api.states.del)
+    .get(app.api.state.getById)
+    .put(app.api.state.save)
+    .delete(app.api.state.del)
 }
