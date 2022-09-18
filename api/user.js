@@ -1,8 +1,10 @@
 const bcrypt = require('bcrypt-node');
-const { user } = require('pg/lib/defaults');
 
 module.exports = app => {
   const { existsOrError, notExistsOrError, equalsOrError } = app.api.validations.validations;
+
+  const fields = ['id', 'name', 'statusId', 'profileId', 'created', 'updated', 'deleted'];
+  const table = 'users';
 
   const encryptPassword = password => {
     const salt = bcrypt.genSaltSync(10);
@@ -18,9 +20,9 @@ module.exports = app => {
       existsOrError(user.confirmPassword, 'Confirmação da senha não informada!');
       equalsOrError(user.password, user.confirmPassword, 'Senhas não conferem!')
 
-      const userFromDB = await app.db('users').where({ name: user.name }).first();
+      const userFromDB = await app.db(table).where({ name: user.name }).first();
       if(!user.id) {
-        notExistsOrError(userFromDB, 'Usuário já cadastrado!');
+        notExistsOrError(userFromDB, `${table} já cadastrado!`);
       }
     } catch(msg) {
       return res.status(400).send(msg);
@@ -33,7 +35,7 @@ module.exports = app => {
 
     if (user.id) {
       user.updated = new Date;
-      app.db('users')
+      app.db(table)
         .update(user)
         .where({ id: user.id })
         .then(_ => res.status(204).send())
@@ -41,7 +43,7 @@ module.exports = app => {
     } else {
       user.created = new Date;
       user.updated = new Date;
-      app.db('users')
+      app.db(table)
         .insert(user)
         .then(_ => res.status(204).send())
         .catch(err => res.status(500).send(err));
@@ -49,8 +51,8 @@ module.exports = app => {
   }
 
   const get = (req, res) => {
-    app.db('users')
-      .select('id', 'name', 'statusId', 'profileId', 'created', 'updated', 'deleted')
+    app.db(table)
+      .select(fields)
       .then(users => res.json(users))
       .catch(err => res.status(500).send(err));
   }
@@ -62,7 +64,7 @@ module.exports = app => {
       user.deleted = new Date;
       user.statusId = 0;
 
-      app.db('users')
+      app.db(table)
         .update(user)
         .where({ id: user.id })
         .then(_ => res.status(204).send())

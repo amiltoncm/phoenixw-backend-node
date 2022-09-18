@@ -1,5 +1,8 @@
 module.exports = app => {
   const { existsOrError, notExistsOrError } = app.api.validations.validations;
+  
+  const fields = ['id', 'name'];
+  const table = 'status';
 
   const save = async (req, res) => {
     const status = {...req.body }
@@ -7,22 +10,22 @@ module.exports = app => {
     try {
       existsOrError(status.name, 'Nome não informado!');
 
-      const statusFromDB = await app.db('status').where({ id: status.id }).first();
+      const statusFromDB = await app.db(table).where({ id: status.id }).first();
       if(!status.id) {      
-        notExistsOrError(statusFromDB, 'Status já cadastrado!');
+        notExistsOrError(statusFromDB, `${table} já cadastrado!`);
       }
     } catch(msg) {
       return res.status(400).send(msg);
     }
 
     if (status.id) {
-      app.db('status')
+      app.db(table)
         .update(status)
         .where({ id: status.id })
         .then(_ => res.status(204).send())
         .catch(err => res.status(500).send(err));
     } else {
-      app.db('status')
+      app.db(table)
         .insert(status)
         .then(_ => res.status(204).send())
         .catch(err => res.status(500).send(err));
@@ -30,8 +33,8 @@ module.exports = app => {
   }
 
   const get = (req, res) => {
-    app.db('status')
-      .select('id', 'name')
+    app.db(table)
+      .select(fields)
       .then(status => res.json(status))
       .catch(err => res.status(500).send(err))
   }
@@ -39,7 +42,7 @@ module.exports = app => {
   const del = (req, res) => {
     const status = {...req.body }
     if (status.id) {
-      app.db('status')
+      app.db(table)
         .delete(status)
         .where({ id: status.id })
         .then(_ => res.status(204).send())

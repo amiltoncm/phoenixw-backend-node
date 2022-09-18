@@ -1,5 +1,8 @@
 module.exports = app => {
   const { existsOrError } = app.api.validations.validations;
+  
+  const fields = ['id', 'name', 'iso2', 'iso3', 'statusId', 'created', 'updated'];
+  const table = 'countries';
 
   const save = async (req, res) => {
     const country = {...req.body }
@@ -14,11 +17,11 @@ module.exports = app => {
       return res.status(400).send(msg);
     }
 
-    const countryFromDB = await app.db('countries').where({ id: country.id }).first();
+    const countryFromDB = await app.db(table).where({ id: country.id }).first();
 
     if (countryFromDB) {
       country.updated = new Date;
-      app.db('countries')
+      app.db(table)
         .update(country)
         .where({ id: country.id })
         .then(_ => res.status(204).send())
@@ -26,7 +29,7 @@ module.exports = app => {
     } else {
       country.created = new Date;
       country.updated = new Date;
-      app.db('countries')
+      app.db(table)
         .insert(country)
         .then(_ => res.status(204).send())
         .catch(err => res.status(500).send(err));
@@ -34,8 +37,8 @@ module.exports = app => {
   }
 
   const get = async (req, res) => {
-    app.db('countries')
-      .select('id', 'name', 'iso2', 'iso3', 'statusId', 'created', 'updated')
+    app.db(table)
+      .select(fields)
       .then(countries => res.json(countries))
       .catch(err => res.status(500).send(err));
   }
@@ -43,26 +46,26 @@ module.exports = app => {
   const getById = async (req, res) => {
     const countryId = req.params.id;
     if (countryId) {
-      app.db('countries')
-        .select('id', 'name', 'iso2', 'iso3', 'statusId', 'created', 'updated')
+      app.db(table)
+        .select(fields)
         .where({ id: countryId })
         .then(countries => res.json(countries))
         .catch(err => res.status(500).send(err));
     } else {
-      return res.status(400).send('País não encontrado!');
+      return res.status(400).send(`${table} não encontrado!`);
     }
   }
 
   const del = async (req, res) => {
     const country = {...req.body }
     if (country.id) {
-      app.db('countries')
+      app.db(table)
         .delete(country)
         .where({ id: country.id })
         .then(_ => res.status(204).send())
         .catch(err => res.status(500).send(err));
     } else {
-      return res.status(400).send('País não encontrado!');
+      return res.status(400).send(`${table} não encontrado!`);
     }
   }
 
