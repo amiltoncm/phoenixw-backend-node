@@ -26,7 +26,6 @@ module.exports = app => {
       return res.status(400).send(msg);
     }
 
-    
     if (state.id) {
       state.updated = new Date;
       app.db(table)

@@ -34,4 +34,7 @@ knex seed:make seed_name
 
 knex seed:run
 
+knex seed:run --specific=seed-filename.js --specific=another-seed-filename.js
+knex seed:run --specific=0006_cities.js
+
 Token de autenticação utilizado - JWT
