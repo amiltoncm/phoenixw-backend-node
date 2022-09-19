@@ -1,5 +1,5 @@
 module.exports = app => {
-  // Person type
+  // Person types
   app
     .route('/domains/person_types')
     .all(app.config.passport.authenticate())
