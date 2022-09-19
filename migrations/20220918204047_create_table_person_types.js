@@ -3,8 +3,8 @@
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-  return knex.schema.createTable('person_type', function (table) {
-    table.increments('id');
+  return knex.schema.createTable('person_types', function (table) {
+    table.integer('id').primary();
     table.string('name', 15).notNullable().unique();
   })
 };

@@ -1,3 +1,6 @@
+DROP TABLE public.person_types;
+DROP TABLE public.public_places;
+DROP TABLE public.cities;
 DROP TABLE public.states;
 DROP TABLE public.countries;
 DROP TABLE public.users;

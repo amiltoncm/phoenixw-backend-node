@@ -3,7 +3,7 @@
  * @returns { Promise<void> } 
  */
 exports.seed = async function(knex) {
-  await knex('person_type').insert([
+  await knex('person_types').insert([
     {id: 1, name: 'PESSOA FÍSICA'},
     {id: 2, name: 'PESSOA JURÍDICA'}
   ]);

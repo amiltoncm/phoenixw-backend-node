@@ -4,7 +4,7 @@
  */
 exports.up = function(knex) {
   return knex.schema.createTable('public_places', function (table) {
-    table.increments('id');
+    table.integer('id').primary();
     table.string('name', 20).notNullable().unique();
   })
 };
