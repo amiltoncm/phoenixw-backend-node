@@ -1,11 +1,12 @@
 const app = require('express')();
 const consign = require('consign');
 const db = require('./config/db');
+const { version, servicePort } = require('../backend_node/.env');
 
 app.db = db;
 
-const versao = '1.0.0';
-const port = 3001;
+const port = servicePort || 3000;
+const versao = version || '1.0.0';
 
 consign()
   .include('./config/passport.js')
