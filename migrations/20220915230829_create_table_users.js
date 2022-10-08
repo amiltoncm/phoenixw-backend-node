@@ -8,19 +8,19 @@ exports.up = function (knex) {
     table.string('name', 20).notNullable().unique();
     table.string('password', 128).notNullable();
     table
-      .integer('statusId')
+    .integer('profile_id')
+    .notNullable()
+    .unsigned()
+    .index()
+    .references('id')
+    .inTable('profiles');
+    table
+      .integer('status_id')
       .notNullable()
       .unsigned()
       .index()
       .references('id')
       .inTable('status');
-    table
-      .integer('profileId')
-      .notNullable()
-      .unsigned()
-      .index()
-      .references('id')
-      .inTable('profiles');
     table.dateTime('created').notNullable();
     table.dateTime('updated').notNullable();
     table.dateTime('deleted');

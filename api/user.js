@@ -3,8 +3,18 @@ const bcrypt = require('bcrypt-node');
 module.exports = app => {
   const { existsOrError, notExistsOrError, equalsOrError } = app.api.validations.validations;
 
-  const fields = ['id', 'name', 'statusId', 'profileId', 'created', 'updated', 'deleted'];
-  const table = 'users';
+  const fields = [
+    'id',
+    'name',
+    'password',
+    'profile',
+    'status',
+    'created',
+    'updated',
+    'deleted'
+  ];
+
+  const table = 'users'
 
   const encryptPassword = password => {
     const salt = bcrypt.genSaltSync(10);
@@ -51,9 +61,26 @@ module.exports = app => {
   }
 
   const get = (req, res) => {
-    app.db(table)
-      .select(fields)
-      .then(users => res.json(users))
+
+    app.db({a: 'users', b: 'profiles', c: 'status'})
+      .select({
+        id: 'a.id', 
+        name: 'a.name',
+        profileId: 'a.profile_id',
+        profile: 'b.name',
+        statusId: 'a.status_id',
+        status: 'c.name',
+        created: 'a.created',
+        updated: 'a.updated',
+        deleted: 'a.deleted'
+      })
+      .whereRaw('?? = ??', ['a.profile_id', 'b.id'])
+      .whereRaw('?? = ??', ['a.status_id', 'c.id'])
+      .whereRaw('?? = 1', ['a.status_id'])
+      .whereRaw('?? > 0', ['a.id'])
+      .orderBy('name', 'asc')
+      .then(users => 
+        res.json(users))
       .catch(err => res.status(500).send(err));
   }
 

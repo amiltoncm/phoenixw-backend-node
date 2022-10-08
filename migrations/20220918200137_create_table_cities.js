@@ -8,12 +8,12 @@ exports.up = function(knex) {
       table.increments('id').primary();
       table.integer('code').notNullable();
       table.string('name', 50).notNullable();
-      table.integer('stateId').notNullable()
+      table.integer('state_id').notNullable()
         .unsigned()
         .index()
         .references('id')
         .inTable('states');
-        table.integer('statusId').notNullable()
+        table.integer('status_id').notNullable()
         .unsigned()
         .index()
         .references('id')

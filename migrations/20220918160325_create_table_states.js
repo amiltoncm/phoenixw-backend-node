@@ -9,12 +9,12 @@ exports.up = function(knex) {
       table.integer('code').notNullable();
       table.string('abbreviation', 2).notNullable();
       table.string('name', 30).notNullable();
-      table.integer('countryId').notNullable()
+      table.integer('country_id').notNullable()
         .unsigned()
         .index()
         .references('id')
         .inTable('countries');
-        table.integer('statusId').notNullable()
+        table.integer('status_id').notNullable()
         .unsigned()
         .index()
         .references('id')

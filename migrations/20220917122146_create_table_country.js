@@ -9,7 +9,7 @@ exports.up = function(knex) {
       table.string('name', 50).notNullable().unique();
       table.string('iso2', 2).notNullable().unique();
       table.string('iso3', 3).notNullable().unique();
-      table.integer('statusId').notNullable()
+      table.integer('status_id').notNullable()
         .unsigned()
         .index()
         .references('id')
