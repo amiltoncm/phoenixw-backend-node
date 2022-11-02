@@ -1,0 +1,5 @@
+- Contar tetantivas seguidas de erro de autenticação, bloquear após X tentativas
+- Expiração de senha periódicos
+- Recuperação de senha via e-mal
+- Controle de senhas já utilizadas (últimas 5)
+- Cadastro de perguntas / respostas para recuperação

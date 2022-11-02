@@ -3,18 +3,19 @@ const bcrypt = require('bcrypt-node');
 module.exports = app => {
   const { existsOrError, notExistsOrError, equalsOrError } = app.api.validations.validations;
 
-  const fields = [
-    'id',
-    'name',
-    'password',
-    'profile',
-    'status',
-    'created',
-    'updated',
-    'deleted'
-  ];
+  const fields = {
+    id: 'a.id', 
+    name: 'a.name',
+    profileId: 'a.profile_id',
+    profile: 'b.name',
+    statusId: 'a.status_id',
+    status: 'c.name',
+    created: 'a.created',
+    updated: 'a.updated',
+    deleted: 'a.deleted'
+  };
 
-  const table = 'users'
+  const tables = {a: 'users', b: 'profiles', c: 'status'}
 
   const encryptPassword = password => {
     const salt = bcrypt.genSaltSync(10);
@@ -30,9 +31,9 @@ module.exports = app => {
       existsOrError(user.confirmPassword, 'Confirmação da senha não informada!');
       equalsOrError(user.password, user.confirmPassword, 'Senhas não conferem!')
 
-      const userFromDB = await app.db(table).where({ name: user.name }).first();
+      const userFromDB = await app.db(tables).where({ name: user.name }).first();
       if(!user.id) {
-        notExistsOrError(userFromDB, `${table} já cadastrado!`);
+        notExistsOrError(userFromDB, `${tables} já cadastrado!`);
       }
     } catch(msg) {
       return res.status(400).send(msg);
@@ -45,7 +46,7 @@ module.exports = app => {
 
     if (user.id) {
       user.updated = new Date;
-      app.db(table)
+      app.db(tables)
         .update(user)
         .where({ id: user.id })
         .then(_ => res.status(204).send())
@@ -53,7 +54,7 @@ module.exports = app => {
     } else {
       user.created = new Date;
       user.updated = new Date;
-      app.db(table)
+      app.db(tables)
         .insert(user)
         .then(_ => res.status(204).send())
         .catch(err => res.status(500).send(err));
@@ -62,18 +63,8 @@ module.exports = app => {
 
   const get = (req, res) => {
 
-    app.db({a: 'users', b: 'profiles', c: 'status'})
-      .select({
-        id: 'a.id', 
-        name: 'a.name',
-        profileId: 'a.profile_id',
-        profile: 'b.name',
-        statusId: 'a.status_id',
-        status: 'c.name',
-        created: 'a.created',
-        updated: 'a.updated',
-        deleted: 'a.deleted'
-      })
+    app.db(tables)
+      .select(fields)
       .whereRaw('?? = ??', ['a.profile_id', 'b.id'])
       .whereRaw('?? = ??', ['a.status_id', 'c.id'])
       .whereRaw('?? = 1', ['a.status_id'])
@@ -91,7 +82,7 @@ module.exports = app => {
       user.deleted = new Date;
       user.statusId = 0;
 
-      app.db(table)
+      app.db(tables)
         .update(user)
         .where({ id: user.id })
         .then(_ => res.status(204).send())
