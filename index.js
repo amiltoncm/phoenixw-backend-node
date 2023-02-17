@@ -1,7 +1,7 @@
 const app = require('express')();
 const consign = require('consign');
 const db = require('./config/db');
-const { version, servicePort } = require('../backend_node/.env');
+const { version, servicePort } = require('../backend/.env');
 
 app.db = db;
 
@@ -15,6 +15,7 @@ consign()
   .then('./api')
   .then('./config/routes.js')
   .then('./routes')
+  .then('./routes/domains')
   .into(app);
 
 app.listen(port, () => {
